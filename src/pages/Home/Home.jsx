@@ -10,6 +10,7 @@ import useUserRole from "./../../hooks/userUserRole";
 import HowItWorks from "./shared/HowItWorks";
 import WhyChoose from "./shared/WhyChoose";
 import Extra from "./shared/Extra";
+import TaskShowcase from "./shared/TaskShowcase";
 
 const Home = () => {
   const { userInfo } = useUserRole();
@@ -52,6 +53,10 @@ const Home = () => {
       </section>
       <section>
         <BestWorker />
+      </section>
+
+      <section>
+        <TaskShowcase/>
       </section>
 
       <section className="my-10">
