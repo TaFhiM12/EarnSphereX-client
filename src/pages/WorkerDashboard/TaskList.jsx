@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { User, CalendarDays, DollarSign, Users } from "lucide-react";
+import { User, CalendarDays, DollarSign, Users, ArrowUpDown } from "lucide-react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { usePageTitle } from "../../hooks/usePageTitle";
 
@@ -14,17 +14,30 @@ const TaskList = () => {
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
   const limit = 6; // Items per page
+  const [sortBy, setSortBy] = useState("completion_date");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const { data: taskData = {}, isLoading } = useQuery({
-    queryKey: ["tasks", page],
+    queryKey: ["tasks", page, sortBy, sortOrder],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/tasklist?page=${page}&limit=${limit}`);
+      const res = await axiosSecure.get(
+        `/tasklist?page=${page}&limit=${limit}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+      );
       return res.data;
     },
     keepPreviousData: true,
   });
 
   const { tasks = [], totalTasks = 0, totalPages = 1, currentPage = 1 } = taskData;
+
+  const toggleSort = (field) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(field);
+      setSortOrder("asc");
+    }
+  };
 
   if (isLoading)
     return (
@@ -35,6 +48,27 @@ const TaskList = () => {
 
   return (
     <div className="container mx-auto px-4 pb-8">
+      {/* Sorting Controls */}
+      <div className="flex justify-end mb-4">
+        <div className="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm border border-teal-100">
+          <span className="text-sm text-gray-600">Sort by:</span>
+          <button
+            onClick={() => toggleSort("payable_amount")}
+            className="btn btn-xs flex items-center gap-1"
+          >
+            <ArrowUpDown className="w-3 h-3" />
+            Price {sortBy === "payable_amount" && (sortOrder === "asc" ? "↑" : "↓")}
+          </button>
+          <button
+            onClick={() => toggleSort("completion_date")}
+            className="btn btn-xs flex items-center gap-1"
+          >
+            <ArrowUpDown className="w-3 h-3" />
+            Date {sortBy === "completion_date" && (sortOrder === "asc" ? "↑" : "↓")}
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tasks.map((task) => (
           <div
