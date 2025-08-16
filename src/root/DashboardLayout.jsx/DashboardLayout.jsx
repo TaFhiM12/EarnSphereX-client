@@ -106,48 +106,48 @@ const DashboardLayout = () => {
   };
 
   const handleLogout = () => {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'You will be logged out from the system',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#0d9488', // Teal color
-    cancelButtonColor: '#6b7280', // Gray color
-    confirmButtonText: 'Yes, log out!',
-    cancelButtonText: 'Cancel',
-    background: '#ffffff', // White background
-    backdrop: `
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out from the system",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#0d9488", // Teal color
+      cancelButtonColor: "#6b7280", // Gray color
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "Cancel",
+      background: "#ffffff", // White background
+      backdrop: `
       rgba(5, 148, 136, 0.1)
     `,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      logOut()
-        .then(() => {
-          // Show success message
-          Swal.fire({
-            title: 'Logged Out!',
-            text: 'You have been successfully logged out',
-            icon: 'success',
-            confirmButtonColor: '#0d9488',
-            timer: 1500,
-            timerProgressBar: true,
-            willClose: () => {
-              navigate('/auth/login');
-            }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logOut()
+          .then(() => {
+            // Show success message
+            Swal.fire({
+              title: "Logged Out!",
+              text: "You have been successfully logged out",
+              icon: "success",
+              confirmButtonColor: "#0d9488",
+              timer: 1500,
+              timerProgressBar: true,
+              willClose: () => {
+                navigate("/auth/login");
+              },
+            });
+          })
+          .catch((error) => {
+            console.error("Logout error:", error);
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to log out. Please try again.",
+              icon: "error",
+              confirmButtonColor: "#dc2626", // Red color
+            });
           });
-        })
-        .catch((error) => {
-          console.error("Logout error:", error);
-          Swal.fire({
-            title: 'Error!',
-            text: 'Failed to log out. Please try again.',
-            icon: 'error',
-            confirmButtonColor: '#dc2626', // Red color
-          });
-        });
-    }
-  });
-};
+      }
+    });
+  };
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -303,6 +303,8 @@ const DashboardLayout = () => {
     if (location.pathname.startsWith("/dashboard/task-details/")) {
       return "Task Details";
     }
+    if (location.pathname === `/dashboard/profile`)
+      return `${user?.displayName}'s Profile`;
     return "Dashboard";
   };
 
@@ -315,8 +317,7 @@ const DashboardLayout = () => {
       return "Check worker submissions waiting for approval";
     if (location.pathname === "/dashboard/payment-history")
       return "All your transaction records in one place";
-    // if (location.pathname === "/dashboard/track")
-    //   return "Monitor your tasks' progress and status";
+
     if (location.pathname === "/dashboard/purchase-coins")
       return "Buy more coins to create new tasks";
     if (location.pathname === "/dashboard/task-list")
@@ -518,11 +519,13 @@ const DashboardLayout = () => {
               }`}
             >
               {user?.photoURL ? (
-                <img
-                  src={user.photoURL}
-                  alt="User Avatar"
-                  className="w-full h-full rounded-full object-cover"
-                />
+                <Link to="/dashboard/profile">
+                  <img
+                    src={user.photoURL}
+                    alt="User Avatar"
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                </Link>
               ) : (
                 <div className="w-full h-full rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 flex items-center justify-center text-white font-semibold">
                   {user?.displayName?.charAt(0).toUpperCase() || "U"}
@@ -531,14 +534,16 @@ const DashboardLayout = () => {
             </div>
             {!isSidebarCollapsed && (
               <>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {user?.displayName || "User"}
-                  </p>
-                  <p className="text-xs text-gray-600 truncate capitalize">
-                    {role}
-                  </p>
-                </div>
+                <Link to="/dashboard/profile" >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {user?.displayName || "User"}
+                    </p>
+                    <p className="text-xs text-gray-600 truncate capitalize">
+                      {role}
+                    </p>
+                  </div>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="p-1 rounded-md hover:bg-gray-100"
@@ -687,14 +692,16 @@ const DashboardLayout = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {user?.displayName || "User"}
-                  </p>
-                  <p className="text-xs text-gray-600 truncate capitalize">
-                    {role}
-                  </p>
-                </div>
+                <Link to="/dashboard/profile">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {user?.displayName || "User"}
+                    </p>
+                    <p className="text-xs text-gray-600 truncate capitalize">
+                      {role}
+                    </p>
+                  </div>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="p-1 rounded-md hover:bg-gray-100"

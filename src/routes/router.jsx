@@ -26,6 +26,7 @@ import WithDrawRequests from './../pages/AdminDashboard.jsx/WithDrawRequests';
 import Dashboard from "../Dashboard/Dashboard";
 import ErrorPage from "../components/ErrorPage";
 import FAQ from "../pages/FAQ/FAQ";
+import UserProfile from "../pages/UserProfile/UserProfile";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,13 @@ export const router = createBrowserRouter([
         path: ':dashboard',
         element: <Dashboard/>,
       },
+      {
+        path:'profile',
+        element: <PrivateRoute>
+          <UserProfile/>
+        </PrivateRoute>
+      }
+      ,
       {
         path: 'add-task',
         element: <BuyerRoute>
