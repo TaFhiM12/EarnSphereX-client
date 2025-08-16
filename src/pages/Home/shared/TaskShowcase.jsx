@@ -6,7 +6,7 @@ import Loading from '../../../Components/Loading';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
-const TaskShowcase = () => {
+const TaskShowcase = ({ role }) => {
   const navigate = useNavigate();
   const [hoveredCard, setHoveredCard] = useState(null);
   const axiosSecure = useAxiosSecure();
@@ -147,25 +147,33 @@ const TaskShowcase = () => {
                     )}
                   </div>
                 </div>
-                <button
-                  onClick={() => navigate(`/dashboard/task-details/${task._id}`)}
-                  className="x-3 py-1.5 mt-2 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-lg hover:from-teal-700 hover:to-emerald-700 transition-all duration-300 font-medium text-sm sm:text-base"
-                >
-                  View Details
-                </button>
+                {
+                    role === "worker" && (
+                        <button
+                            onClick={() => navigate(`/dashboard/task-details/${task._id}`)}
+                            className="x-3 py-1.5 mt-2 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-lg hover:from-teal-700 hover:to-emerald-700 transition-all duration-300 font-medium text-sm sm:text-base"
+                        >
+                            View Details
+                        </button>
+                    )
+                }
               </motion.div>
             </motion.div>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <button
-            onClick={() => navigate('/dashboard/task-list')}
-            className="px-8 py-3 border-2 border-teal-600 text-teal-600 font-medium rounded-full hover:bg-teal-50 transition-colors flex items-center mx-auto cursor-pointer"
-          >
-            View All Available Tasks
-            <FiArrowRight className="ml-2" />
-          </button>
+          {
+            role === "worker" && (
+              <button
+                onClick={() => navigate('/dashboard/task-list')}
+                className="px-8 py-3 border-2 border-teal-600 text-teal-600 font-medium rounded-full hover:bg-teal-50 transition-colors flex items-center mx-auto cursor-pointer"
+              >
+                View All Available Tasks
+                <FiArrowRight className="ml-2" />
+              </button>
+            )
+          }
         </div>
       </div>
     </section>

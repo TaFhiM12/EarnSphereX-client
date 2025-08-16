@@ -18,7 +18,7 @@ const TaskList = () => {
   const { data: taskData = {}, isLoading } = useQuery({
     queryKey: ["tasks", page],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/tasks?page=${page}&limit=${limit}`);
+      const res = await axiosSecure.get(`/tasklist?page=${page}&limit=${limit}`);
       return res.data;
     },
     keepPreviousData: true,

@@ -55,19 +55,20 @@ const Home = () => {
         <BestWorker />
       </section>
 
-      <section>
-        <TaskShowcase/>
+      <section className="my-10">
+        <TaskShowcase role={role} />
+      </section>
+
+      <section >
+        <WhyChoose />
       </section>
 
       <section className="my-10">
-        <WhyChoose />
-      </section>
-      <section>
         <TestimonialSection />
       </section>
 
       <section>
-        <Extra role={role} className="my-10"/>
+        <Extra role={role} className="mb-10"/>
       </section>
 
       
