@@ -106,12 +106,6 @@ export const router = createBrowserRouter([
           <PaymentHistory/>
         </BuyerRoute>
       },
-      // {
-      //   path: 'track',
-      //   element: <BuyerRoute>
-      //     <TrackTask/>
-      //   </BuyerRoute>
-      // },
       {
         path: 'task-list',
         element: <WorkerRoute>

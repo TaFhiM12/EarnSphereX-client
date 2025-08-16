@@ -13,7 +13,7 @@ const TaskList = () => {
 
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
-  const limit = 6; // Items per page
+  const limit = 6; 
   const [sortBy, setSortBy] = useState("completion_date");
   const [sortOrder, setSortOrder] = useState("asc");
 

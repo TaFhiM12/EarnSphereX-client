@@ -11,6 +11,7 @@ import HowItWorks from "./shared/HowItWorks";
 import WhyChoose from "./shared/WhyChoose";
 import Extra from "./shared/Extra";
 import TaskShowcase from "./shared/TaskShowcase";
+import TaskJourney from "./shared/TaskJourney";
 
 const Home = () => {
   const { userInfo } = useUserRole();
@@ -47,28 +48,30 @@ const Home = () => {
       <section>
         <Hero />
       </section>
-
       <section className="my-10">
         <HowItWorks role={role} />
       </section>
-      <section>
-        <BestWorker />
-      </section>
-
-      <section className="my-10">
+      <section className="">
         <TaskShowcase role={role} />
       </section>
 
-      <section >
+      <section className="my-10">
         <WhyChoose />
       </section>
 
+      <section className="my-10">
+        <TaskJourney role={role} />
+      </section>
+
+      <section>
+        <BestWorker className="my-10" />
+      </section>
       <section className="my-10">
         <TestimonialSection />
       </section>
 
       <section>
-        <Extra role={role} className="mb-10"/>
+        <Extra role={role} className="my-10"/>
       </section>
 
       
