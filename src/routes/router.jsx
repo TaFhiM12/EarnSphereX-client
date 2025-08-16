@@ -25,6 +25,7 @@ import ManageUsers from "../pages/AdminDashboard.jsx/ManageUsers";
 import WithDrawRequests from './../pages/AdminDashboard.jsx/WithDrawRequests';
 import Dashboard from "../Dashboard/Dashboard";
 import ErrorPage from "../components/ErrorPage";
+import FAQ from "../pages/FAQ/FAQ";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true , element: <Home/>
+      },
+      {
+        path: '/faq',
+        element: <FAQ/>
       },
       {
         path: 'forbidden',

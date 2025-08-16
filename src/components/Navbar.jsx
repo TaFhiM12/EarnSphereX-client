@@ -9,6 +9,7 @@ import {
   FiGrid,
   FiMenu,
   FiX,
+  FiHelpCircle,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
@@ -39,6 +40,7 @@ const Navbar = () => {
           Home
         </NavLink>
       </li>
+      
       <li>
         <a
           href="https://github.com/TaFhiM12"
@@ -67,6 +69,20 @@ const Navbar = () => {
           </NavLink>
         </li>
       )}
+      <li>
+        <NavLink
+          to="/faq"
+          className={({ isActive }) =>
+            `flex items-center gap-1 ${
+              isActive ? "text-teal-600 font-medium" : "hover:text-teal-500"
+            }`
+          }
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <FiHelpCircle className="text-lg" />
+          FAQ
+        </NavLink>
+      </li>
     </>
   );
 
