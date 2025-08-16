@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowRight, FiDollarSign, FiUsers, FiClock } from 'react-icons/fi';
-import { useNavigate } from 'react-router';
-import Loading from '../../../Components/Loading';
-import { useQuery } from '@tanstack/react-query';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiArrowRight, FiDollarSign, FiUsers, FiClock } from "react-icons/fi";
+import { useNavigate } from "react-router";
+import Loading from "../../../Components/Loading";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const TaskShowcase = ({ role }) => {
   const navigate = useNavigate();
@@ -12,21 +12,21 @@ const TaskShowcase = ({ role }) => {
   const axiosSecure = useAxiosSecure();
 
   const { data: trendingTasks = [], isLoading } = useQuery({
-    queryKey: ['trending-task'],
+    queryKey: ["trending-task"],
     queryFn: async () => {
-      const res = await axiosSecure.get('/trendingTask');
+      const res = await axiosSecure.get("/trendingTask");
       return res.data
         .sort((a, b) => b.payable_amount - a.payable_amount)
         .slice(0, 4)
-        .map(task => ({
+        .map((task) => ({
           ...task,
           id: task._id,
           reward: task.payable_amount,
           workersNeeded: task.required_workers - (task.no_of_completed || 0),
           timeLeft: getTimeRemaining(task.completion_date),
-          category: getCategoryFromTask(task.task_title)
+          category: getCategoryFromTask(task.task_title),
         }));
-    }
+    },
   });
 
   if (isLoading) {
@@ -37,20 +37,20 @@ const TaskShowcase = ({ role }) => {
     const end = new Date(endDate);
     const now = new Date();
     const diff = end - now;
-    
-    if (diff <= 0) return 'Expired';
-    
+
+    if (diff <= 0) return "Expired";
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    return `${days} day${days !== 1 ? 's' : ''} remaining`;
+    return `${days} day${days !== 1 ? "s" : ""} remaining`;
   }
 
   function getCategoryFromTask(title) {
-    if (/image|photo|picture/i.test(title)) return 'Images';
-    if (/video|youtube/i.test(title)) return 'Video';
-    if (/survey|research/i.test(title)) return 'Research';
-    if (/app|software/i.test(title)) return 'Tech';
-    if (/write|content|blog/i.test(title)) return 'Writing';
-    return 'General';
+    if (/image|photo|picture/i.test(title)) return "Images";
+    if (/video|youtube/i.test(title)) return "Video";
+    if (/survey|research/i.test(title)) return "Research";
+    if (/app|software/i.test(title)) return "Tech";
+    if (/write|content|blog/i.test(title)) return "Writing";
+    return "General";
   }
 
   return (
@@ -79,10 +79,14 @@ const TaskShowcase = ({ role }) => {
             >
               {/* Front of Card */}
               <motion.div
-                className={`absolute inset-0 bg-gradient-to-br from-teal-100 to-emerald-100 rounded-xl p-6 shadow-md flex flex-col justify-between backface-hidden ${hoveredCard === task._id ? 'rotate-y-180 opacity-0' : 'rotate-y-0 opacity-100'}`}
+                className={`absolute inset-0 bg-gradient-to-br from-teal-100 to-emerald-100 rounded-xl p-6 shadow-md flex flex-col justify-between backface-hidden ${
+                  hoveredCard === task._id
+                    ? "rotate-y-180 opacity-0"
+                    : "rotate-y-0 opacity-100"
+                }`}
                 animate={{
                   rotateY: hoveredCard === task._id ? 180 : 0,
-                  opacity: hoveredCard === task._id ? 0 : 1
+                  opacity: hoveredCard === task._id ? 0 : 1,
                 }}
                 transition={{ duration: 0.6 }}
               >
@@ -110,10 +114,14 @@ const TaskShowcase = ({ role }) => {
 
               {/* Back of Card */}
               <motion.div
-                className={`absolute inset-0 bg-gradient-to-br from-teal-600 to-emerald-600 rounded-xl p-6 shadow-lg flex flex-col justify-between backface-hidden text-white ${hoveredCard === task._id ? 'rotate-y-0 opacity-100' : 'rotate-y-180 opacity-0'}`}
+                className={`absolute inset-0 bg-gradient-to-br from-teal-600 to-emerald-600 rounded-xl p-6 shadow-lg flex flex-col justify-between backface-hidden text-white ${
+                  hoveredCard === task._id
+                    ? "rotate-y-0 opacity-100"
+                    : "rotate-y-180 opacity-0"
+                }`}
                 animate={{
                   rotateY: hoveredCard === task._id ? 0 : 180,
-                  opacity: hoveredCard === task._id ? 1 : 0
+                  opacity: hoveredCard === task._id ? 1 : 0,
                 }}
                 transition={{ duration: 0.6 }}
               >
@@ -128,7 +136,10 @@ const TaskShowcase = ({ role }) => {
                     </div>
                     <div className="flex items-center">
                       <FiUsers className="mr-2" />
-                      <span>{task.workersNeeded > 0 ? task.workersNeeded : 'No'} more workers needed</span>
+                      <span>
+                        {task.workersNeeded > 0 ? task.workersNeeded : "No"}{" "}
+                        more workers needed
+                      </span>
                     </div>
                     <div className="flex items-center">
                       <FiClock className="mr-2" />
@@ -137,9 +148,9 @@ const TaskShowcase = ({ role }) => {
                     {task.task_image_url && (
                       <div className="pt-2">
                         <div className="w-full h-20 bg-teal-700 rounded-md overflow-hidden">
-                          <img 
-                            src={task.task_image_url} 
-                            alt="Task preview" 
+                          <img
+                            src={task.task_image_url}
+                            alt="Task preview"
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -147,33 +158,39 @@ const TaskShowcase = ({ role }) => {
                     )}
                   </div>
                 </div>
-                {
-                    role === "worker" && (
-                        <button
-                            onClick={() => navigate(`/dashboard/task-details/${task._id}`)}
-                            className="x-3 py-1.5 mt-2 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-lg hover:from-teal-700 hover:to-emerald-700 transition-all duration-300 font-medium text-sm sm:text-base"
-                        >
-                            View Details
-                        </button>
-                    )
-                }
+                {role === "worker" && (
+                  <button
+                    onClick={() =>
+                      navigate(`/dashboard/task-details/${task._id}`)
+                    }
+                    className="x-3 py-1.5 mt-2 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-lg hover:from-teal-700 hover:to-emerald-700 transition-all duration-300 font-medium text-sm sm:text-base"
+                  >
+                    View Details
+                  </button>
+                )}
               </motion.div>
             </motion.div>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          {
-            role === "worker" && (
-              <button
-                onClick={() => navigate('/dashboard/task-list')}
-                className="px-8 py-3 border-2 border-teal-600 text-teal-600 font-medium rounded-full hover:bg-teal-50 transition-colors flex items-center mx-auto cursor-pointer"
-              >
-                View All Available Tasks
+          {role === "worker" && (
+            <motion.button
+              onClick={() => navigate("/dashboard/task-list")}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 10px 25px -5px rgba(13, 148, 136, 0.2)",
+              }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="px-8  py-4 bg-gradient-to-r from-teal-600 to-emerald-500 text-white rounded-lg font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+            >
+              <div className="flex justify-center items-center">
+                <span>View All Available Tasks</span>
                 <FiArrowRight className="ml-2" />
-              </button>
-            )
-          }
+              </div>
+            </motion.button>
+          )}
         </div>
       </div>
     </section>

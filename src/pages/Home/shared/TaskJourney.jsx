@@ -12,17 +12,17 @@ import {
 import { Link } from "react-router";
 
 const TaskJourney = ({ role }) => {
-  let link = '';
-  if(role === 'buyer'){
-    link = '/dashboard/add-task';
-  } else if (role === 'worker') {
-    link = '/dashboard/task-list';
-  } else if (role === 'admin') {
-    link = '/dashboard/manage-tasks';
-  } else if (role === 'guest') {
-    link = '/auth/login';
+  let link = "";
+  if (role === "buyer") {
+    link = "/dashboard/add-task";
+  } else if (role === "worker") {
+    link = "/dashboard/task-list";
+  } else if (role === "admin") {
+    link = "/dashboard/manage-tasks";
+  } else if (role === "guest") {
+    link = "/auth/login";
   }
-  
+
   const steps = [
     {
       icon: <FiPlusCircle className="w-6 h-6" />,
@@ -158,11 +158,12 @@ const TaskJourney = ({ role }) => {
         >
           <motion.button
             whileHover={{
-              scale: 1.03,
-              boxShadow: "0 10px 25px -5px rgba(13, 148, 136, 0.3)",
+              scale: 1.02,
+              boxShadow: "0 10px 25px -5px rgba(13, 148, 136, 0.2)",
             }}
             whileTap={{ scale: 0.98 }}
-            className="bg-gradient-to-r from-teal-600 to-teal-500 text-white px-8 py-3 rounded-md font-medium shadow-md hover:shadow-lg transition-all text-lg md:mt-50"
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            className="px-8 py-4 bg-gradient-to-r from-teal-600 to-emerald-500 text-white rounded-lg font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300 md:mt-50"
           >
             <Link to={`${link}`}>
               {role === "guest"
@@ -177,17 +178,15 @@ const TaskJourney = ({ role }) => {
             </Link>
           </motion.button>
           <p className="text-gray-500 mt-4 text-sm">
-            {
-                role === "guest"
-                ? "Join thousands of workers and buyers in our trusted platform"
-                : role === "worker"
-                ? "Find your next task and start earning"
-                : role === "admin"
-                ? "Manage tasks and oversee the platform"
-                : role === "buyer"
-                ? "Post a task and find the right worker"
-                : ""
-            }
+            {role === "guest"
+              ? "Join thousands of workers and buyers in our trusted platform"
+              : role === "worker"
+              ? "Find your next task and start earning"
+              : role === "admin"
+              ? "Manage tasks and oversee the platform"
+              : role === "buyer"
+              ? "Post a task and find the right worker"
+              : ""}
           </p>
         </motion.div>
       </div>
