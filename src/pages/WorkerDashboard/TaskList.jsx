@@ -1,11 +1,7 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import {
-  User,
-  CalendarDays,
-  DollarSign,
-  Users,
-} from "lucide-react";
+import { User, CalendarDays, DollarSign, Users } from "lucide-react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { usePageTitle } from "../../hooks/usePageTitle";
 
@@ -16,14 +12,19 @@ const TaskList = () => {
   });
 
   const axiosSecure = useAxiosSecure();
+  const [page, setPage] = useState(1);
+  const limit = 6; // Items per page
 
-  const { data: tasks = [], isLoading } = useQuery({
-    queryKey: ["tasks"],
+  const { data: taskData = {}, isLoading } = useQuery({
+    queryKey: ["tasks", page],
     queryFn: async () => {
-      const res = await axiosSecure.get("/tasks");
-      return res.data.filter((task) => task.required_workers > 0);
+      const res = await axiosSecure.get(`/tasks?page=${page}&limit=${limit}`);
+      return res.data;
     },
+    keepPreviousData: true,
   });
+
+  const { tasks = [], totalTasks = 0, totalPages = 1, currentPage = 1 } = taskData;
 
   if (isLoading)
     return (
@@ -34,7 +35,6 @@ const TaskList = () => {
 
   return (
     <div className="container mx-auto px-4 pb-8">
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tasks.map((task) => (
           <div
@@ -46,6 +46,9 @@ const TaskList = () => {
                 src={task.task_image_url}
                 alt={task.task_title}
                 className="w-full h-48 object-cover"
+                onError={(e) => {
+                  e.target.src = 'https://placehold.co/600x400?text=Task+Image';
+                }}
               />
             </figure>
             <div className="card-body p-6 flex flex-col flex-grow">
@@ -61,12 +64,12 @@ const TaskList = () => {
 
                 <div className="flex items-center gap-2">
                   <CalendarDays className="w-5 h-5 text-teal-500" />
-                  <span>Complete by: {task.completion_date}</span>
+                  <span>Complete by: {new Date(task.completion_date).toLocaleDateString()}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <DollarSign className="w-5 h-5 text-teal-500" />
-                  <span>Pay: ${task.payable_amount}</span>
+                  <span>Pay: {task.payable_amount} coins</span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -97,6 +100,55 @@ const TaskList = () => {
           </p>
         </div>
       )}
+
+      {/* Pagination Controls */}
+      {totalTasks > limit && (
+        <div className="flex justify-center mt-8">
+          <div className="join">
+            <button
+              onClick={() => setPage((old) => Math.max(old - 1, 1))}
+              disabled={page === 1}
+              className="join-item btn btn-sm"
+            >
+              «
+            </button>
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              // Show limited page numbers with current page in middle
+              let pageNum;
+              if (totalPages <= 5) {
+                pageNum = i + 1;
+              } else if (page <= 3) {
+                pageNum = i + 1;
+              } else if (page >= totalPages - 2) {
+                pageNum = totalPages - 4 + i;
+              } else {
+                pageNum = page - 2 + i;
+              }
+
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => setPage(pageNum)}
+                  className={`join-item btn btn-sm ${page === pageNum ? 'btn-active bg-teal-500 text-white' : ''}`}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
+            <button
+              onClick={() => setPage((old) => (old < totalPages ? old + 1 : old))}
+              disabled={page === totalPages}
+              className="join-item btn btn-sm"
+            >
+              »
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="text-center mt-2 text-sm text-gray-500">
+        Showing {(currentPage - 1) * limit + 1} to {Math.min(currentPage * limit, totalTasks)} of {totalTasks} tasks
+      </div>
     </div>
   );
 };

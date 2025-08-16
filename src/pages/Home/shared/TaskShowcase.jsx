@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiDollarSign, FiUsers, FiClock } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
 import Loading from '../../../Components/Loading';
 import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const TaskShowcase = () => {
   const navigate = useNavigate();
   const [hoveredCard, setHoveredCard] = useState(null);
+  const axiosSecure = useAxiosSecure();
 
   const { data: trendingTasks = [], isLoading } = useQuery({
     queryKey: ['trending-task'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:5000/trendingTask');
-      // Sort by payable_amount in descending order and take top 4
+      const res = await axiosSecure.get('/trendingTask');
       return res.data
         .sort((a, b) => b.payable_amount - a.payable_amount)
         .slice(0, 4)
@@ -33,7 +33,6 @@ const TaskShowcase = () => {
     return <Loading />;
   }
 
-  // Helper function to calculate time remaining
   function getTimeRemaining(endDate) {
     const end = new Date(endDate);
     const now = new Date();
@@ -45,7 +44,6 @@ const TaskShowcase = () => {
     return `${days} day${days !== 1 ? 's' : ''} remaining`;
   }
 
-  // Helper function to extract category from task title
   function getCategoryFromTask(title) {
     if (/image|photo|picture/i.test(title)) return 'Images';
     if (/video|youtube/i.test(title)) return 'Video';
@@ -150,8 +148,8 @@ const TaskShowcase = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => navigate(`/task-details/${task._id}`)}
-                  className="w-full py-2 bg-white text-teal-600 font-medium rounded-lg hover:bg-gray-100 transition-colors"
+                  onClick={() => navigate(`/dashboard/task-details/${task._id}`)}
+                  className="x-3 py-1.5 mt-2 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-lg hover:from-teal-700 hover:to-emerald-700 transition-all duration-300 font-medium text-sm sm:text-base"
                 >
                   View Details
                 </button>
@@ -162,8 +160,8 @@ const TaskShowcase = () => {
 
         <div className="text-center mt-12">
           <button
-            onClick={() => navigate('/tasks')}
-            className="px-8 py-3 border-2 border-teal-600 text-teal-600 font-medium rounded-full hover:bg-teal-50 transition-colors flex items-center mx-auto"
+            onClick={() => navigate('/dashboard/task-list')}
+            className="px-8 py-3 border-2 border-teal-600 text-teal-600 font-medium rounded-full hover:bg-teal-50 transition-colors flex items-center mx-auto cursor-pointer"
           >
             View All Available Tasks
             <FiArrowRight className="ml-2" />

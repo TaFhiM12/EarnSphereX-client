@@ -27,14 +27,13 @@ const useAxiosSecure = () => {
         return res;
       },
       (error) => {
-        console.log("error in the response interseptor", error);
         const status = error.status;
         if (status === 403) {
           navigate("/forbidden");
         } else if (status === 401) {
           logOut()
             .then(() => {
-              navigate("/login");
+              navigate("/auth/login");
             })
             .catch(() => {});
         }
